@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teemie The Visa Girlie — Travel Consultant</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --purple: #b478ff;
+    --teal: #7de8d0;
+    --pink: #ff6b9d;
+    --amber: #ffb347;
+    --bg: #0a0a0f;
+    --bg2: #0f0f18;
+    --bg3: #141420;
+    --text: #f0ede8;
+    --text-muted: rgba(240, 237, 232, 0.55);
+    --text-faint: rgba(240, 237, 232, 0.25);
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(180,120,255,0.35);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--purple);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: screen;
+  }
+
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(180,120,255,0.4);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s;
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(10,10,15,0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.3s;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--text);
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0; right: 0;
+    height: 1px;
+    background: var(--purple);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    color: #0a0a0f !important;
+    font-weight: 500 !important;
+    padding: 8px 20px;
+    border-radius: 100px;
+    text-decoration: none;
+    font-size: 13px !important;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.85 !important; }
+  .nav-cta::after { display: none !important; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8rem 2rem 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-orb1 {
+    position: absolute;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(180,120,255,0.13) 0%, transparent 65%);
+    top: -200px; right: -150px;
+    pointer-events: none;
+  }
+
+  .hero-orb2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(125,232,208,0.1) 0%, transparent 65%);
+    bottom: -100px; left: -100px;
+    pointer-events: none;
+  }
+
+  .hero-orb3 {
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,107,157,0.07) 0%, transparent 65%);
+    top: 40%; left: 20%;
+    pointer-events: none;
+  }
+
+  /* Floating particles */
+  .particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--purple);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float-particle linear infinite;
+  }
+
+  @keyframes float-particle {
+    0% { opacity: 0; transform: translateY(0) scale(0); }
+    10% { opacity: 0.6; transform: translateY(-20px) scale(1); }
+    90% { opacity: 0.2; }
+    100% { opacity: 0; transform: translateY(-120px) scale(0.5); }
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--purple);
+    border: 1px solid rgba(180,120,255,0.35);
+    padding: 7px 18px;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fade-up 0.8s ease both;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--teal);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.6); }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 9vw, 6.5rem);
+    font-weight: 700;
+    line-height: 1.0;
+    background: linear-gradient(135deg, #ffffff 0%, #dcc8ff 40%, #9fe8d8 80%, #ffffff 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.3rem;
+    animation: fade-up 0.8s 0.15s ease both, shimmer 6s 1s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--teal);
+    margin-bottom: 1.25rem;
+    animation: fade-up 0.8s 0.25s ease both;
+  }
+
+  .hero-desc {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+    animation: fade-up 0.8s 0.35s ease both;
+  }
+
+  .hero-desc strong { color: var(--text); font-weight: 500; }
+
+  .tiktok-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    animation: fade-up 0.8s 0.45s ease both;
+    text-decoration: none;
+    transition: border-color 0.3s, color 0.3s;
+  }
+
+  .tiktok-pill:hover {
+    border-color: rgba(255,45,85,0.4);
+    color: var(--text);
+  }
+
+  .tiktok-live {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ff2d55;
+  }
+
+  .tiktok-live-dot {
+    width: 6px; height: 6px;
+    background: #ff2d55;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fade-up 0.8s 0.55s ease both;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    color: #0a0a0f;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 100px;
+    cursor: none;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s, transform 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 14px 32px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 100px;
+    cursor: none;
+    letter-spacing: 0.5px;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-outline:hover { border-color: rgba(255,255,255,0.45); transform: translateY(-2px); }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-faint);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: fade-up 1s 1.2s ease both;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--purple), transparent);
+    animation: scroll-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-pulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.4); opacity: 0.3; }
+  }
+
+  /* Marquee */
+  .marquee-wrapper {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.1rem 0;
+    background: rgba(255,255,255,0.01);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 0;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-item {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 2.5rem;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  .marquee-dot {
+    width: 4px; height: 4px;
+    background: var(--purple);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Sections */
+  .section {
+    padding: 7rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--purple);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.18;
+    margin-bottom: 1rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* Services */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .service-card {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem 1.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.35s, transform 0.35s, background 0.35s;
+  }
+
+  .service-card:hover {
+    border-color: var(--card-accent);
+    transform: translateY(-6px);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--card-accent) 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+
+  .service-card:hover::before { opacity: 1; }
+
+  .service-card::after {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, var(--card-accent) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+    border-radius: 50%;
+  }
+
+  .service-card:hover::after { opacity: 0.07; }
+
+  .service-emoji {
+    font-size: 2.2rem;
+    margin-bottom: 1.2rem;
+    display: block;
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.1));
+  }
+
+  .service-number {
+    position: absolute;
+    top: 1.5rem; right: 1.75rem;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--text-faint);
+    font-weight: 300;
+  }
+
+  .service-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 0.6rem;
+  }
+
+  .service-desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* About */
+  .about-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  @media (max-width: 768px) {
+    .about-layout { grid-template-columns: 1fr; gap: 3rem; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+  }
+
+  .about-visual {
+    position: relative;
+  }
+
+  .about-card-main {
+    background: linear-gradient(135deg, rgba(180,120,255,0.1), rgba(125,232,208,0.08));
+    border: 1px solid rgba(180,120,255,0.2);
+    border-radius: 24px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0a0a0f;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 40px rgba(180,120,255,0.3);
+  }
+
+  .about-card-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .about-card-role {
+    font-size: 13px;
+    color: var(--teal);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+  }
+
+  .about-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+  }
+
+  .chip-purple { background: rgba(180,120,255,0.12); color: var(--purple); border: 1px solid rgba(180,120,255,0.2); }
+  .chip-teal { background: rgba(125,232,208,0.1); color: var(--teal); border: 1px solid rgba(125,232,208,0.2); }
+  .chip-pink { background: rgba(255,107,157,0.1); color: var(--pink); border: 1px solid rgba(255,107,157,0.2); }
+
+  .about-floating-card {
+    position: absolute;
+    bottom: -1.5rem;
+    right: -1.5rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .about-floating-icon {
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    background: rgba(180,120,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+
+  .about-floating-text-main {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .about-floating-text-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .about-text-content p {
+    font-size: 1rem;
+    line-height: 1.9;
+    color: var(--text-muted);
+    margin-bottom: 1.25rem;
+  }
+
+  .about-text-content p strong { color: var(--text); font-weight: 500; }
+  .about-text-content p em { color: var(--teal); font-style: normal; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 1.25rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    transition: border-color 0.3s;
+  }
+
+  .stat:hover { border-color: rgba(180,120,255,0.25); }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--purple), var(--teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-lbl {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  /* Testimonial / Quote */
+  .quote-section {
+    background: linear-gradient(135deg, rgba(180,120,255,0.06), rgba(125,232,208,0.06));
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    padding: 4rem 3rem;
+    text-align: center;
+    margin: 0 2rem;
+  }
+
+  .quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    line-height: 0.5;
+    color: var(--purple);
+    opacity: 0.3;
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 3vw, 1.75rem);
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 2rem;
+  }
+
+  .quote-author {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  /* Contact */
+  .contact-section {
+    text-align: center;
+    padding: 7rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .contact-email {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: var(--text);
+    margin: 1.5rem 0;
+    display: block;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .contact-email:hover { color: var(--purple); }
+
+  .contact-channels {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+
+  .channel-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 12px 22px;
+    border-radius: 100px;
+    text-decoration: none;
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    cursor: none;
+  }
+
+  .channel-btn:hover {
+    border-color: var(--purple);
+    background: rgba(180,120,255,0.06);
+    transform: translateY(-3px);
+  }
+
+  .channel-icon { font-size: 1rem; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--text-muted);
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    color: var(--text-faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--text-muted); }
+
+  /* WhatsApp float */
+  .whatsapp-float {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 52px; height: 52px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    z-index: 999;
+    box-shadow: 0 4px 24px rgba(37,211,102,0.35);
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: float-wa 3s ease-in-out infinite;
+  }
+
+  .whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 32px rgba(37,211,102,0.5);
+  }
+
+  @keyframes float-wa {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+  .reveal-delay-6 { transition-delay: 0.6s; }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Nav -->
+<nav>
+  <a href="#" class="nav-logo">Teemie ✦</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-orb3"></div>
+
+  <div class="particles" id="particles"></div>
+
+  <div class="badge">
+    <div class="badge-dot"></div>
+    Travel Consultant & Visa Specialist
+  </div>
+
+  <h1 class="hero-name">Teemie</h1>
+  <p class="hero-sub">The Visa Girlie</p>
+
+  <p class="hero-desc">
+    Your trusted guide to <strong>seamless international travel</strong> — from visa applications to landing safely at your destination.
+  </p>
+
+  <a href="https://tiktok.com/@Teemiethevisagirlie" target="_blank" class="tiktok-pill">
+    <span class="tiktok-live"><span class="tiktok-live-dot"></span> TikTok</span>
+    @Teemiethevisagirlie
+  </a>
+
+  <div class="hero-btns">
+    <a href="#contact" class="btn-primary">Book a Consultation</a>
+    <a href="#services" class="btn-outline">Explore Services</a>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-wrapper">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</div>
+
+<!-- Services -->
+<div class="section" id="services">
+  <p class="section-label reveal">What I offer</p>
+  <h2 class="section-title reveal">Services built for<br>every kind of traveller</h2>
+  <p class="section-subtitle reveal">Whether you're moving abroad, studying internationally, or just need a stress-free travel experience — I handle every detail.</p>
+
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1" style="--card-accent: #b478ff">
+      <span class="service-number">01</span>
+      <span class="service-emoji">🛂</span>
+      <div class="service-name">Visa Assistance</div>
+      <div class="service-desc">Expert, end-to-end visa application support — from documentation prep to submission. I've guided hundreds through the process with a near-perfect success rate.</div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-2" style="--card-accent: #7de8d0">
+      <span class="service-number">02</span>
+      <span class="service-emoji">✈️</span>
+      <div class="service-name">Flight Reservation</div>
+      <div class="service-desc">Smart, budget-conscious flight bookings tailored to your schedule. One-way, return, or complex multi-city itineraries — handled seamlessly.</div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-3" style="--card-accent: #ffb347">
+      <span class="service-number">03</span>
+      <span class="service-emoji">🏨</span>
+      <div class="service-name">Hotel Reservation</div>
+      <div class="service-desc">Carefully selected accommodations that match your comfort level and budget. From boutique stays to business hotels — I find the best options for you.</div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-4" style="--card-accent: #ff6b9d">
+      <span class="service-number">04</span>
+      <span class="service-emoji">🚗</span>
+      <div class="service-name">Airport Transfers</div>
+      <div class="service-desc">Reliable, punctual airport pick-up and drop-off arrangements. Land stress-free and depart on time — every single time.</div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-5" style="--card-accent: #7de8d0">
+      <span class="service-number">05</span>
+      <span class="service-emoji">🎓</span>
+      <div class="service-name">International Admissions</div>
+      <div class="service-desc">Comprehensive support for studying abroad — from university applications to student visa processing. Your dream of international education, simplified.</div>
+    </div>
+
+    <div class="service-card reveal reveal-delay-6" style="--card-accent: #b478ff">
+      <span class="service-number">06</span>
+      <span class="service-emoji">💬</span>
+      <div class="service-name">General Consultation</div>
+      <div class="service-desc">Not sure where to start? Book a one-on-one session and let's map out your entire travel journey together. No question is too big or too small.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Quote -->
+<div class="quote-section reveal">
+  <span class="quote-mark">"</span>
+  <p class="quote-text">Travel is not just moving from one place to another — it's about opening doors to new possibilities. I'm here to make sure yours open smoothly.</p>
+  <p class="quote-author">— Teemie, The Visa Girlie</p>
+</div>
+
+<!-- About -->
+<div class="section" id="about">
+  <div class="about-layout">
+    <div class="about-visual reveal">
+      <div class="about-card-main">
+        <div class="about-avatar">T</div>
+        <div class="about-card-name">Teemie</div>
+        <div class="about-card-role">✦ Travel Consultant & Visa Specialist</div>
+        <div class="about-chips">
+          <span class="chip chip-purple">Visa Expert</span>
+          <span class="chip chip-teal">Project Manager</span>
+          <span class="chip chip-pink">TikTok Creator</span>
+          <span class="chip chip-purple">3 Years Experience</span>
+          <span class="chip chip-teal">Lagos, Nigeria</span>
+        </div>
+
+        <div class="about-floating-card">
+          <div class="about-floating-icon">✈️</div>
+          <div>
+            <div class="about-floating-text-main">@Teemiethevisagirlie</div>
+            <div class="about-floating-text-sub">TikTok · Travel Consultant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-text-content reveal reveal-delay-2">
+      <p class="section-label">Who I am</p>
+      <h2 class="section-title">The story behind<br>the visa girlie</h2>
+
+      <p>Hi, I'm <strong>Teemie</strong> — a Travel Consultant and Project Manager with <em>3 years</em> in the travel industry, having helped hundreds of people plan their travels from itinerary all the way to their destination.</p>
+
+      <p>I've helped people <strong>relocate through study abroad</strong>, making dreams come true. I've reunited families through <strong>family relocation</strong>, and taken clients on unforgettable <strong>vacations</strong> exploring different journeys all at once.</p>
+
+      <p>I studied <strong>Accounting</strong> but chose to pivot when my own study abroad experience didn't go as planned. That personal challenge sparked a mission — to make sure no one else goes through the same. In <em>3 years</em>, I've turned that mission into a thriving consultancy, and I haven't looked back since.</p>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-num">3+</div>
+          <div class="stat-lbl">Years Experience</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">100+</div>
+          <div class="stat-lbl">Clients Helped</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">6+</div>
+          <div class="stat-lbl">Services</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contact -->
+<div class="contact-section" id="contact">
+  <p class="section-label reveal" style="justify-content: center;">Let's connect</p>
+  <h2 class="section-title reveal">Ready to start<br>your journey?</h2>
+  <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.7; margin-top: 0.5rem;" class="reveal">Whether you need visa assistance, a hotel, a flight, or just don't know where to start — reach out. I'm here to help.</p>
+
+  <div class="contact-channels reveal">
+    <a href="https://wa.me/2348101149438" class="channel-btn">
+      <span class="channel-icon">💬</span> WhatsApp
+    </a>
+    <a href="https://tiktok.com/@Teemiethevisagirlie" target="_blank" class="channel-btn">
+      <span class="channel-icon">🎵</span> TikTok
+    </a>
+    <a href="mailto:teemie@visagirlie.com" class="channel-btn">
+      <span class="channel-icon">✉️</span> Email
+    </a>
+    <a href="https://instagram.com/" target="_blank" class="channel-btn">
+      <span class="channel-icon">📸</span> Instagram
+    </a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-logo">Teemie ✦ The Visa Girlie</div>
+  <div class="footer-copy">© 2026 · Lagos, Nigeria · All rights reserved</div>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<!-- WhatsApp float -->
+<a href="https://wa.me/2348101149438" class="whatsapp-float" title="Chat on WhatsApp">💬</a>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .service-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '52px';
+      ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // Particles
+  const pCont = document.getElementById('particles');
+  const colors = ['#b478ff','#7de8d0','#ff6b9d','#ffb347'];
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 2.5) + 'px';
+    pCont.appendChild(p);
+  }
+
+  // Marquee
+  const items = ['Visa Assistance','Flight Reservations','Hotel Bookings','Airport Transfers','International Admissions','General Consultation','Based in Lagos','@Teemiethevisagirlie'];
+  const track = document.getElementById('marqueeTrack');
+  const doubled = [...items, ...items, ...items, ...items];
+  doubled.forEach(text => {
+    const el = document.createElement('div');
+    el.className = 'marquee-item';
+    el.innerHTML = `<span class="marquee-dot"></span>${text}`;
+    track.appendChild(el);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
